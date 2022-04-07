@@ -14,10 +14,24 @@ class AddressSchema(BaseModel):
     flat: str
     door: str
     postal_code: str
+    user_id = int
 
     class Config:
         """ Configurando el orm_mode = True podemos interactuar con los datos de nuestro modelo,
         los datos de nuestro schema se adaptan al de nuestro modelo los cuales constituyen las
         tablas en base de datos """
 
+        orm_mode = True
+
+
+class AddressSchemaOut(BaseModel):
+    city: str
+    location: str
+    street: str
+    flat: str
+    door: str
+    postal_code: str
+    user_id = int
+
+    class Config:
         orm_mode = True
