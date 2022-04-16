@@ -17,5 +17,10 @@ class UserModel(Base):
                             cascade="all, delete",
                             passive_deletes=True)
 
+    user_order = relationship("ProductModel",
+                              back_populates="order",
+                              cascade="all, delete",
+                              passive_deletes=True)
+
 
 Base.metadata.create_all(engine)

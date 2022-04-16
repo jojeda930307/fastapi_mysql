@@ -9,7 +9,7 @@ from src.routes.user_routes import user
 app = FastAPI()
 app.include_router(user)
 app.include_router(address)
-app.include_router(order)
+#app.include_router(order)
 app.include_router(product)
 
 if __name__ == '__main__':

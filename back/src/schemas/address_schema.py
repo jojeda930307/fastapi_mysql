@@ -7,7 +7,7 @@ class AddressSchema(BaseModel):
     """ El schema es la forma que tienen los datos de entrada/salida que usa la api para leer
     desde el cliente y devolver al mismo """
 
-    id: Optional[str]
+    id: Optional[int]
     city: str
     location: str
     street: str

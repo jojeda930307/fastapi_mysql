@@ -18,8 +18,13 @@ def db_list_users(skip, limit, db):
             'street': usr.address_[0].street,
             'flat': usr.address_[0].flat,
             'door': usr.address_[0].door,
-            'postal_code': usr.address_[0].postal_code
-        } if usr.address_ else None
+            'postal_code': usr.address_[0].postal_code,
+        } if usr.address_ else None,
+        'order': [{
+            'image': it.image,
+            'description': it.description,
+            'price': it.price,
+        } if usr.user_order else None for it in usr.user_order]
     } for usr in users]
 
 
@@ -37,8 +42,13 @@ def db_get_user_by_id(id, db):
             'street': user.address_[0].street,
             'flat': user.address_[0].flat,
             'door': user.address_[0].door,
-            'postal_code': user.address_[0].postal_code
-        } if user.address_ else None
+            'postal_code': user.address_[0].postal_code,
+        } if user.address_ else None,
+        'order': [{
+            'image': it.image,
+            'description': it.description,
+            'price': it.price,
+        } if user.user_order else None for it in user.user_order]
     }
 
 

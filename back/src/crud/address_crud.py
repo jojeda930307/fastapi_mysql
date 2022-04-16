@@ -19,7 +19,7 @@ def db_get_address_by_id(id, db):
 
 
 def db_create_address(user_id, addr, db):
-    user = db.query(UserModel).filter(UserModel.id == id).first()
+    user = db.query(UserModel).filter(UserModel.id == user_id).first()
     if not user:
         return False
     db_address = AddressModel(

@@ -20,7 +20,7 @@ async def list_users(skip: int = 0, limit: int = 30, db: Session = Depends(get_d
 
 
 @user.get("/user/{id}", response_model=UserSchemaOut, tags=['Users'])
-async def get_user_by_id(id: str, db: Session = Depends(get_db)):
+async def get_user_by_id(id: int, db: Session = Depends(get_db)):
     """ Devuelve un usuario por su ID """
 
     result = db_get_user_by_id(id, db)
@@ -47,7 +47,7 @@ async def update_user(id: int, user_: UserSchema, db: Session = Depends(get_db))
 
 
 @user.delete('/user/{id}', status_code=HTTP_204_NO_CONTENT, tags=['Users'])
-async def delete_user(id: str, db: Session = Depends(get_db)):
+async def delete_user(id: int, db: Session = Depends(get_db)):
 
     result = db_delete_user(id, db)
     if not result:
