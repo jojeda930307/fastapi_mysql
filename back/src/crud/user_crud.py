@@ -1,9 +1,11 @@
 from cryptography.fernet import Fernet
-
+from passlib.context import CryptContext
 from src.models.user_model import UserModel
 
 key = Fernet.generate_key()
 f = Fernet(key)
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def db_list_users(skip, limit, db):
@@ -52,8 +54,32 @@ def db_get_user_by_id(id, db):
     }
 
 
+def db_get_user_by_email(email, db):
+    user = db.query(UserModel).filter(UserModel.email == email).first()
+    if not user:
+        return False
+    return {
+        'name': user.name,
+        'email': user.email,
+        'password': user.password,
+        'address': {
+            'city': user.address_[0].city,
+            'location': user.address_[0].location,
+            'street': user.address_[0].street,
+            'flat': user.address_[0].flat,
+            'door': user.address_[0].door,
+            'postal_code': user.address_[0].postal_code,
+        } if user.address_ else None,
+        'order': [{
+            'image': it.image,
+            'description': it.description,
+            'price': it.price,
+        } if user.user_order else None for it in user.user_order]
+    }
+
+
 def db_create_user(user_, db):
-    user_data = UserModel(name=user_.name, email=user_.email, password=f.encrypt(user_.password.encode('utf-8')))
+    user_data = UserModel(name=user_.name, email=user_.email, password=pwd_context.hash(user_.password.encode('utf-8')))
     db.add(user_data)
     db.commit()
 
