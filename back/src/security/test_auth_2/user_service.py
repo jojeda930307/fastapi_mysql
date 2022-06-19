@@ -5,15 +5,15 @@ from src.schemas.user_schema import UserSchema
 from src.security.test_auth_2.auth_service import get_password_hash
 
 
-def create_user(user: UserSchema, db):
+def create_user(username, password, db):
     """ Verifica que el usuario que se está creando no esté no base de datos en caso contrario
         devuelve un mensaje de que el usuario existe
     """
 
-    get_user = db.query(UserModel).filter((UserModel.email == user.email) | (UserModel.name == user.name)).first()
+    get_user = db.query(UserModel).filter((UserModel.email == username.email) | (UserModel.name == username.name)).first()
     if get_user:
         msg = "Email already registered"
-        if get_user.name == user.name:
+        if get_user.name == username.name:
             msg = "Username already registered"
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -21,9 +21,9 @@ def create_user(user: UserSchema, db):
         )
 
     db_user = UserModel(
-        name=user.name,
-        email=user.email,
-        password=get_password_hash(user.password)
+        name=username.name,
+        email=username.email,
+        password=get_password_hash(username.password)
     )
     db.add(db_user)
     db.commit()

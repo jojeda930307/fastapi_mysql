@@ -78,8 +78,17 @@ def db_get_user_by_email(email, db):
     }
 
 
-def db_create_user(user_, db):
+def db_create_user_from_json(user_, db):
     user_data = UserModel(name=user_.name, email=user_.email, password=pwd_context.hash(user_.password.encode('utf-8')))
+    db.add(user_data)
+    db.commit()
+
+    user_inserted = db.query(UserModel).where(UserModel.id == user_data.id).first()
+    return user_inserted
+
+
+def db_create_user_from_form(name, email, password, db):
+    user_data = UserModel(name=name, email=email, password=pwd_context.hash(password.encode('utf-8')))
     db.add(user_data)
     db.commit()
 

@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from starlette.status import HTTP_204_NO_CONTENT, HTTP_202_ACCEPTED
 
 from src.config.database import get_db
-from src.crud.user_crud import db_list_users, db_get_user_by_id, db_create_user, db_update_user, db_delete_user
+from src.crud.user_crud import db_list_users, db_get_user_by_id, db_update_user, db_delete_user, \
+    db_create_user_from_json
 from src.schemas.user_schema import UserSchema, UserSchemaOut
 
 
@@ -33,7 +34,7 @@ async def get_user_by_id(id: int, db: Session = Depends(get_db)):
 async def create_user(user_: UserSchema, db: Session = Depends(get_db)):
     """ Inserta un nuevo usuario en la base de datos """
 
-    result = db_create_user(user_, db)
+    result = db_create_user_from_json(user_, db)
     return result
 
 

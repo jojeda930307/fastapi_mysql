@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter, Depends, Body, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette import status
@@ -12,14 +12,8 @@ router1 = APIRouter(prefix="/api/v1")
 
 
 @router1.post(
-    "/user/",
-    tags=["test_auth_users"],
-    status_code=status.HTTP_201_CREATED,
-    response_model=UserSchema,
-    dependencies=[Depends(get_db)],
-    summary="Create a new user"
-)
-def create_user(user: UserSchema = Body(...), db: Session = Depends(get_db)):
+    "/user/")
+def create_user(user: str = Form(default="Username"), passwd: str = Form(default="Password"), db: Session = Depends(get_db)):
     """
     ## Create a new user in the app
 
@@ -32,7 +26,7 @@ def create_user(user: UserSchema = Body(...), db: Session = Depends(get_db)):
     ### Returns
     - user: User info
     """
-    return user_service.create_user(user, db)
+    return user_service.create_user(username, password, db)
 
 
 @router1.post(
