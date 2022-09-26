@@ -5,19 +5,25 @@ from starlette.status import HTTP_204_NO_CONTENT, HTTP_202_ACCEPTED
 
 from src.config.database import get_db
 from src.crud.user_crud import db_list_users, db_get_user_by_id, db_update_user, db_delete_user, \
-    db_create_user_from_json
+    db_create_user_from_json, db_delete_all
 from src.schemas.user_schema import UserSchema, UserSchemaOut
 
 
 user = APIRouter()
 
+@user.get('/deleteAll', response_model=list[UserSchemaOut], tags=['Users'])
+async def delete_all_users(db: Session = Depends(get_db)):
+    """ Devuelve todos los usuarios """
+
+    result = db_delete_all(db)
+    return result
 
 @user.get('/getUsers', response_model=list[UserSchemaOut], tags=['Users'])
 async def list_users(skip: int = 0, limit: int = 30, db: Session = Depends(get_db)):
     """ Devuelve todos los usuarios """
 
-    result = db_list_users(skip, limit, db)
-    return result
+    db_list_users(skip, limit, db)
+    return {"message": "Se ha eliminado toda la tabla"}
 
 
 @user.get("/user/{id}", response_model=UserSchemaOut, tags=['Users'])

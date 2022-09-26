@@ -7,10 +7,17 @@ f = Fernet(key)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+def db_delete_all(db):
+    users = db.query(UserModel).all()
+    for it in users:
+        db.delete(it)
+        db.commit()
+
 
 def db_list_users(skip, limit, db):
     users = db.query(UserModel).offset(skip).limit(limit).all()
     return [{
+        'id': usr.id,
         'name': usr.name,
         'email': usr.email,
         'password': usr.password,
@@ -35,6 +42,7 @@ def db_get_user_by_id(id, db):
     if not user:
         return False
     return {
+        'id': user.id,
         'name': user.name,
         'email': user.email,
         'password': user.password,
@@ -59,6 +67,7 @@ def db_get_user_by_email(email, db):
     if not user:
         return False
     return {
+        'id': user.id,
         'name': user.name,
         'email': user.email,
         'password': user.password,
